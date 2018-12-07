@@ -1,3 +1,5 @@
+const Users = require('./models/user.js');
+
 const express = require('express');
 const path = require('path');
 const utils = require('./lib/hashUtils');
@@ -27,6 +29,16 @@ app.get('/create',
   res.render('index');
 });
 
+app.get('/login', 
+(req, res) => {
+  res.render('login');
+});
+
+app.get('/signup', 
+(req, res) => {
+  res.render('signup');
+});
+
 app.get('/links', 
 (req, res, next) => {
   models.Links.getAll()
@@ -36,6 +48,38 @@ app.get('/links',
     .error(error => {
       res.status(500).send(error);
     });
+});
+
+app.post('/signup', 
+(req, res, next) => {
+  
+  let username = req.body.username;
+  let password = req.body.password;
+  let new_user = {username: username, password: password}
+
+  let data = Users.get({username});
+  res.send(data);
+
+  Users.get(/*something*/)
+    .then(/*something*/() => {
+      if(/*find there's a new user*/)
+        Users.create(new_user);
+      } else {
+        /* redirect to signup*/
+      }
+    )
+
+    .catch(error => {
+      res.status(500).send(error);
+    })
+
+
+  // Users.create(new_user);
+
+  //res.send(new_user)
+
+  //res.send([req.body.username, req.body.password]);
+  
 });
 
 app.post('/links', 
