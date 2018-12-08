@@ -57,21 +57,59 @@ app.post('/signup',
   let password = req.body.password;
   let new_user = {username: username, password: password}
 
-  let data = Users.get({username});
-  res.send(data);
+  // console.log('req object', req.body);
+  // console.log('res object', res.body);
+  return Users.get({username})
+  // let data = Users.get({username})
+  // console.log( "this is the promise: ", data.then(promise => console.log(promise["username"])))
+  //.then(data => console.log(data));
+  // // console.log('record created? :', data);
+  // Users.create(new_user);
+  //console.log("this is the data", data)
+    .then(promise => {
+  // data.then(promise => {
+    console.log("promise[username] ", promise[username]);
+    console.log("username", username)
+    if(promise["username"] === username) {
+      res.redirect("/signup")
+    } else {
+      Users.create(new_user).then(() => res.redirect("/"))
+      //res.status(200);
+      // res.redirect("/")
+      //res.send(new_user);
+    }
+  })
+  .catch(promise => {
+    res.send(promise["username"]);
+  });
+  
+  //Users.create(new_user)
+  // Users.create(new_user);
+  // res.redirect("/")
+  // if( not found ) {
+  //   Users.create(new_user);;
+  // } else {
+  //   res.redirect("/signup") ;
+  // }
+  // Users.create(new_user);
 
-  Users.get(/*something*/)
-    .then(/*something*/() => {
-      if(/*find there's a new user*/)
-        Users.create(new_user);
-      } else {
-        /* redirect to signup*/
-      }
-    )
+  // Users.create(new_user)
 
-    .catch(error => {
-      res.status(500).send(error);
-    })
+  // res.send(new_user)
+  // res.send(data);
+
+  // Users.get(/*something*/)
+  //   .then(/*something*/() => {
+  //     if(/*find there's a new user*/)
+  //       Users.create(new_user);
+  //     } else {
+  //       /* redirect to signup*/
+  //     }
+  //   )
+
+  //   .catch(error => {
+  //     res.status(500).send(error);
+  //   })
 
 
   // Users.create(new_user);

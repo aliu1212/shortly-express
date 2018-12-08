@@ -51,11 +51,13 @@ class Model {
    * the conditions provided, only one will be provided upon fulfillment.
    */
   get(options) {
+    console.log('options: ', options)
     let parsedOptions = parseData(options);
-    console.log('parsed options: ', parsedOptions)
+    console.log('parsed options: ', parsedOptions.string)
     
     let queryString = `SELECT * FROM ${this.tablename} WHERE ${parsedOptions.string.join(' AND ')} LIMIT 1`;
     console.log(queryString);
+    // console.log(executeQuery(queryString, parsedOptions.values).then(results => results[0]))
     return executeQuery(queryString, parsedOptions.values).then(results => results[0]);
   }
 
