@@ -56,32 +56,43 @@ app.post('/signup',
   let username = req.body.username;
   let password = req.body.password;
   let new_user = {username: username, password: password}
-
+  return Users.get({username})
+  .then((promise) => {
+    if(!promise) {
+      return Users.create(new_user).then(()=> {res.redirect("/")
+      })
+    }
+    
+    res.redirect("/signup")
+  })
+  .catch(err => console.err(error))
+});
   // console.log('req object', req.body);
   // console.log('res object', res.body);
-  return Users.get({username})
-  // let data = Users.get({username})
-  // console.log( "this is the promise: ", data.then(promise => console.log(promise["username"])))
-  //.then(data => console.log(data));
-  // // console.log('record created? :', data);
-  // Users.create(new_user);
-  //console.log("this is the data", data)
-    .then(promise => {
-  // data.then(promise => {
-    console.log("promise[username] ", promise[username]);
-    console.log("username", username)
-    if(promise["username"] === username) {
-      res.redirect("/signup")
-    } else {
-      Users.create(new_user).then(() => res.redirect("/"))
-      //res.status(200);
-      // res.redirect("/")
-      //res.send(new_user);
-    }
-  })
-  .catch(promise => {
-    res.send(promise["username"]);
-  });
+
+  // return Users.get({username})
+  // // let data = Users.get({username})
+  // // console.log( "this is the promise: ", data.then(promise => console.log(promise["username"])))
+  // //.then(data => console.log(data));
+  // // // console.log('record created? :', data);
+  // // Users.create(new_user);
+  // //console.log("this is the data", data)
+  //   .then(promise => {
+  // // data.then(promise => {
+  //   console.log("promise[username] ", promise[username]);
+  //   console.log("username", username)
+  //   if(promise["username"] === username) {
+  //     res.redirect("/signup")
+  //   } else {
+  //     Users.create(new_user).then(() => res.redirect("/"))
+  //     //res.status(200);
+  //     // res.redirect("/")
+  //     //res.send(new_user);
+  //   }
+  // })
+  // .catch(promise => {
+  //   res.send(promise["username"]);
+  // });
   
   //Users.create(new_user)
   // Users.create(new_user);
@@ -118,7 +129,7 @@ app.post('/signup',
 
   //res.send([req.body.username, req.body.password]);
   
-});
+// });
 
 app.post('/links', 
 (req, res, next) => {
