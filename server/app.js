@@ -171,7 +171,23 @@ app.post('/links',
 // Write your authentication routes here
 /************************************************************/
 
-
+app.post('/login',
+  (req, res, next) => {
+    models.Users.get({ username: req.body.username})
+    .then(result => {
+      if (result) {
+        let isMatch = models.Users.compare(req.body.password, result.password, result.salt);
+        if (isMatch) {
+          res.redirect("/")
+        } else {
+          res.status(201).redirect('/login');
+        }
+      } else {
+        res.redirect('/login')
+      }
+    })
+  }
+)
 
 /************************************************************/
 // Handle the code parameter route last - if all other routes fail
